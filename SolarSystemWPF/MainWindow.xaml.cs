@@ -89,7 +89,7 @@ namespace SolarSystemWPF
 
         private void Tick(object? sender, EventArgs e)
         {
-            solarSystem.Advance(0.05);
+            solarSystem.Advance(0.1);
             solarSystem.Render(draw);
 
             if (focusObject != null)

@@ -9,9 +9,11 @@
 
   <ItemGroup>
     <None Remove="solarsystem.csv" />
+    <None Remove="solarsystem2.csv" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="solarsystem2.csv" />
     <Resource Include="solarsystem.csv" />
   </ItemGroup>
 

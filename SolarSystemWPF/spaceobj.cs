@@ -17,8 +17,8 @@ namespace SpaceSim
         public double Radius { get; set; }
         public Ellipse? Visual { get; set; }
         public TextBlock? Text { get; set; }
-
-        public double Scalar = 60;
+        public Boolean ShowText = true;
+        public double Scalar = 15;
 
         public SpaceObject(string name)
         {
@@ -50,8 +50,8 @@ namespace SpaceSim
         public virtual Point GetScaledPosition(double time)
         {
             double angle = 2 * Math.PI * time / OrbitalPeriod;
-            double x = Math.Log10(OrbitalRadius) * Math.Cos(angle) * Scalar;
-            double y = Math.Log10(OrbitalRadius) * Math.Sin(angle) * Scalar;
+            double x = Math.Pow(Math.Log10(OrbitalRadius), 2) * Math.Cos(angle) * Scalar;
+            double y = Math.Pow(Math.Log10(OrbitalRadius), 2) * Math.Sin(angle) * Scalar;
             return new(x, y);
         }
 
@@ -86,8 +86,8 @@ namespace SpaceSim
         public override Point GetScaledPosition(double time)
         {
             double angle = 2 * Math.PI * time / OrbitalPeriod;
-            double x = Math.Log10(OrbitalRadius) * Math.Cos(angle) * Scalar;
-            double y = Math.Log10(OrbitalRadius) * Math.Sin(angle) * Scalar;
+            double x = Math.Pow(Math.Log10(OrbitalRadius), 2) * Math.Cos(angle) * Scalar;
+            double y = Math.Pow(Math.Log10(OrbitalRadius), 2) * Math.Sin(angle) * Scalar;
 
             if (ReferencePoint != null)
             {
@@ -142,7 +142,8 @@ namespace SpaceSim
     {
         public Moon(string name) : base(name)
         {
-            Scalar = 10;
+            ShowText = false;
+            Scalar = 5;
         }
         public override string GetInformation()
         {
@@ -202,8 +203,9 @@ namespace SpaceSim
                     // find reference
                     string tempName = vars[0];
                     string objectType = vars[1];
-                    int tempRadius = int.Parse(vars[3]);
+                    int tempOrbitalRadius = int.Parse(vars[3]);
                     double tempPeriod = double.Parse(vars[4]);
+                    double tempRadius = double.Parse(vars[5]);
                     SpaceObject tempReference = SpaceObjects.Find(obj => obj.Name == vars[2]);
 
                     switch (objectType)
@@ -231,8 +233,9 @@ namespace SpaceSim
 
                     if (tempObject != null)
                     {
-                        tempObject.OrbitalRadius = tempRadius;
+                        tempObject.OrbitalRadius = tempOrbitalRadius;
                         tempObject.OrbitalPeriod = tempPeriod;
+                        tempObject.Radius = Math.Pow(Math.Log10(tempRadius), 2);
                         SpaceObjects.Add(tempObject);
                     }
                 }
@@ -246,12 +249,15 @@ namespace SpaceSim
                 obj.Visual = new Ellipse();
                 obj.Visual.Width = obj.Visual.Height = obj.Radius;
                 obj.Visual.Fill = new SolidColorBrush(Colors.Red);
-                obj.Text = new TextBlock();
-                obj.Text.Text = obj.Name;
-                obj.Text.Foreground = new SolidColorBrush(Colors.White);
-                obj.Text.FontSize = 12;
                 canvas.Children.Add(obj.Visual);
-                canvas.Children.Add(obj.Text);
+                if (obj.ShowText)
+                {
+                    obj.Text = new TextBlock();
+                    obj.Text.Text = obj.Name;
+                    obj.Text.Foreground = new SolidColorBrush(Colors.White);
+                    obj.Text.FontSize = 12;
+                    canvas.Children.Add(obj.Text);
+                }
             }
         }
 
@@ -266,8 +272,11 @@ namespace SpaceSim
 
                 Canvas.SetTop(obj.Visual, posY - obj.Visual.ActualHeight / 2);
                 Canvas.SetLeft(obj.Visual, posX - obj.Visual.ActualWidth / 2);
-                Canvas.SetTop(obj.Text, posY - obj.Text.ActualHeight / 2 - obj.Visual.ActualHeight / 2 - 10);
-                Canvas.SetLeft(obj.Text, posX - obj.Text.ActualWidth / 2);
+                if (obj.ShowText)
+                {
+                    Canvas.SetTop(obj.Text, posY - obj.Text.ActualHeight / 2 - obj.Visual.ActualHeight / 2 - 10);
+                    Canvas.SetLeft(obj.Text, posX - obj.Text.ActualWidth / 2);
+                }
             }
         }
 
