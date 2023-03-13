@@ -204,7 +204,8 @@ namespace SpaceSim
                     string tempName = vars[0];
                     string objectType = vars[1];
                     int tempOrbitalRadius = int.Parse(vars[3]);
-                    double tempPeriod = double.Parse(vars[4]);
+                    double tempPeriod;
+                    double.TryParse(vars[4], out tempPeriod);
                     double tempRadius = double.Parse(vars[5]);
                     SpaceObject tempReference = SpaceObjects.Find(obj => obj.Name == vars[2]);
 

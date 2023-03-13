@@ -1,7 +1,6 @@
 ﻿using SpaceSim;
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Resources;
@@ -15,7 +14,6 @@ namespace SolarSystemWPF
     public partial class MainWindow : Window
     {
         private SpaceSystem solarSystem;
-        private TextBlock textBlock = new();
         private SpaceObject? focusObject = null;
         private ScaleTransform scaleTransformer = new();
         private TranslateTransform translateTransformer = new();
@@ -27,7 +25,6 @@ namespace SolarSystemWPF
             Uri uri = new Uri("/solarsystem.csv", UriKind.Relative);
             StreamResourceInfo info = Application.GetResourceStream(uri);
 
-
             draw.Background = new SolidColorBrush(Colors.Black);
 
             TransformGroup transformGroup = new();
@@ -35,16 +32,8 @@ namespace SolarSystemWPF
             transformGroup.Children.Add(translateTransformer);
             draw.RenderTransform = transformGroup;
 
-
-
-            /*            transform.ScaleY *= 2;
-                        transform.ScaleX *= 2;*/
-
-
             solarSystem = new SpaceSystem(info.Stream);
             solarSystem.SetupDrawable(draw);
-
-            /*focusObject = solarSystem.SpaceObjects.Find(obj => obj.Name == "Earth");*/
 
             DispatcherTimer t = new()
             {
