@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -203,10 +204,9 @@ namespace SpaceSim
                     // find reference
                     string tempName = vars[0];
                     string objectType = vars[1];
-                    int tempOrbitalRadius = int.Parse(vars[3]);
-                    double tempPeriod;
-                    double.TryParse(vars[4], out tempPeriod);
-                    double tempRadius = double.Parse(vars[5]);
+                    int tempOrbitalRadius = int.Parse(vars[3], CultureInfo.InvariantCulture);
+                    double tempPeriod = double.Parse(vars[4], CultureInfo.InvariantCulture);
+                    double tempRadius = double.Parse(vars[5], CultureInfo.InvariantCulture);
                     SpaceObject tempReference = SpaceObjects.Find(obj => obj.Name == vars[2]);
 
                     switch (objectType)
